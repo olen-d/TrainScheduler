@@ -41,7 +41,33 @@ $(document).ready(() => {
         console.log(snapshot.val().frequency);
         console.log(snapshot.val().dateAdded); */
         let sv = snapshot.val();
-        let newRow = `<tr><th scope=\"row\">${sv.name}</th><td>${sv.destination}</td><td>${sv.frequency}</td><td>-99</td><td>-99</td></tr>`;
+
+        // Calculate some times
+        let nextArrival = 0;
+        let minutesAway = 0;
+
+        let first = sv.first;
+        let freq = sv.frequency;
+        let mFirst = moment(first,"HH:mm");
+        let mInterval = moment().diff(mFirst,"minutes");
+
+        if (mInterval < 0) {
+            nextArrival = moment(first,"HH:mm").format("h:mm a");
+            minutesAway = mFirst.diff(moment(),"minutes");
+        } else {
+            // Figure out when the next train is coming
+            mp = Math.ceil(mInterval / freq) * freq;
+            
+            nextArrival = mFirst.add(mp, "minutes");
+            minutesAway = nextArrival.diff(moment(),"minutes"); 
+            nextArrival = nextArrival.format("h:mm a");
+        }
+        //console.log(minutesAway);
+        //console.log(nextArrival);
+        // When is the next train arriving?
+        // How many minutes away is it?
+
+        let newRow = `<tr><th scope=\"row\">${sv.name}</th><td>${sv.destination}</td><td>${freq}</td><td>${nextArrival}</td><td>${minutesAway}</td></tr>`;
         $("#trains").append(newRow);
         // Handle the errors
       }, function(errorObject) {
