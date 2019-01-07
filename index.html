@@ -11,7 +11,7 @@
         <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
         <script>
         // Initialize Firebase
-        var config = {
+        const config = {
         apiKey: "AIzaSyBnIayw_umZkBFOKKfQLlHzq8QVjwFa5Cc",
         authDomain: "projectseven-249db.firebaseapp.com",
         databaseURL: "https://projectseven-249db.firebaseio.com",
@@ -20,6 +20,7 @@
         messagingSenderId: "585201311831"
         };
         firebase.initializeApp(config);
+        dataRef = firebase.database();
         </script>
 
         <!-- Bootstrap CSS -->
