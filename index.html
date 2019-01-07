@@ -5,8 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title>
-            
+            Train Schedule &laquo; Atlanta MMTC
         </title>
+        
+        <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+        var config = {
+        apiKey: "AIzaSyBnIayw_umZkBFOKKfQLlHzq8QVjwFa5Cc",
+        authDomain: "projectseven-249db.firebaseapp.com",
+        databaseURL: "https://projectseven-249db.firebaseio.com",
+        projectId: "projectseven-249db",
+        storageBucket: "projectseven-249db.appspot.com",
+        messagingSenderId: "585201311831"
+        };
+        firebase.initializeApp(config);
+        </script>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -21,9 +35,67 @@
         <!-- Site Specific Styles -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 
-        <!-- JavaScript -->
-        <script src="assets/javascript/app.js"></script> 
     </head>
         <body>
+            <div class="container">
+                <div class="row">
+                    <div class="col-1">
+
+                    </div>
+                    <div class="col-10">
+                        <div class="jumbotron">
+                            <h1>Atlanta Multimodal Transportation Center Train Schedule</h1>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1">
+
+                    </div>
+                    <div class="col-10">
+                        <!--    Schedule Table Goes Here    -->
+                    </div>
+                    <div class="col-1">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1">
+
+                    </div>
+                    <div class="col-10">
+                        <!--    Administration Table Goes Here    -->
+                        <form></form>
+                            <div class="form-group">
+                                <label for="train-name">Train Name</label>
+                                <input type="text" class="form-control" id="train-name" placeholder="Enter train name.">
+                            </div>
+                            <div class="form-group">
+                                <label for="train-destination">Destination</label>
+                                <input type="text" class="form-control" id="train-destination" placeholder="Enter train destination.">
+                            </div>
+                            <div class="form-group">
+                                <label for="first-train">First Train Departure Time</label>
+                                <input type="text" class="form-control" id="first-train" aria-describedby="first-help" placeholder="Enter departure time of the first train.">
+                                <small id="first-help" class="form-text text-muted">In HH:MM format, military (or 24-hour) time</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="train-frequency">Train Frequency</label>
+                                <input type="text" class="form-control" id="train-frequency" aria-describedby="frequency-help" placeholder="Enter tain frequency.">
+                                <small id="frequncy-help" class="form-text text-muted">In minutes</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="add-train">Submit</button>
+                        </form>
+                    </div>
+                    <div class="col-1">
+
+                    </div>                   
+                </div>
+            </div>
         </body>
+        <!-- JavaScript -->
+        <script src="assets/js/app.js"></script> 
     </html>
