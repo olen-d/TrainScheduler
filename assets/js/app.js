@@ -12,42 +12,24 @@ firebase.initializeApp(config);
 dataRef = firebase.database();
 
 const train = new Object();
+let trains = [];
 let trainsRef = dataRef.ref("/trains");
 
-
-$(document).ready(() => {
-    $("#add-train").on("click", (e) => {
-        e.preventDefault();
+const trainSchedules = {
+    addTrain: () => {
         train["name"] = $("#train-name").val().trim();
         train["destination"] = $("#train-destination").val().trim();
         train["first"] = $("#first-train").val().trim();
         train["frequency"] = $("#train-frequency").val().trim();
         train["dateAdded"] = firebase.database.ServerValue.TIMESTAMP;
         
-        
+        // Handle errors 
         trainsRef.push(train, (error) => {
             (error ? console.log("Errors handled " + error) : console.log("Train successfully added to the database. "));
         });
-
-        
-        
-    });
-    trainsRef.orderByChild("name").on("child_added", function(snapshot) {
-        // Log everything that's coming out of snapshot
-        /* console.log(snapshot.val());
-        console.log(snapshot.val().name);
-        console.log(snapshot.val().destination);
-        console.log(snapshot.val().first);
-        console.log(snapshot.val().frequency);
-        console.log(snapshot.val().dateAdded); */
-        let sv = snapshot.val();
-
-        // Calculate some times
-        let nextArrival = 0;
-        let minutesAway = 0;
-
-        let first = sv.first;
-        let freq = sv.frequency;
+    },
+    
+    updateTimes: (first, freq) => {
         let mFirst = moment(first,"HH:mm");
         let mInterval = moment().diff(mFirst,"minutes");
 
@@ -57,20 +39,65 @@ $(document).ready(() => {
         } else {
             // Figure out when the next train is coming
             mp = Math.ceil(mInterval / freq) * freq;
-            
             nextArrival = mFirst.add(mp, "minutes");
             minutesAway = nextArrival.diff(moment(),"minutes"); 
             nextArrival = nextArrival.format("h:mm a");
         }
-        //console.log(minutesAway);
-        //console.log(nextArrival);
-        // When is the next train arriving?
-        // How many minutes away is it?
 
-        let newRow = `<tr><th scope=\"row\">${sv.name}</th><td>${sv.destination}</td><td>${freq}</td><td>${nextArrival}</td><td>${minutesAway}</td></tr>`;
-        $("#trains").append(newRow);
-        // Handle the errors
-      }, function(errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-      });
+        return {nextArrival: nextArrival, minutesAway: minutesAway};
+    },
+
+    displaySchedule: () => {
+        trainsRef.orderByChild("name").on("child_added", function(snapshot) {
+
+            let sv = snapshot.val();
+            let sk = snapshot.ref.key;
+    
+            let nextArrival = 0;
+            let minutesAway = 0;
+    
+            let first = sv.first;
+            let freq = sv.frequency;
+    
+            let times = trainSchedules.updateTimes(first, freq);
+            
+            let newRow = `<tr id=\"${sk}\" data-first=\"${first}\" data-frequency=\"${freq}\"><th scope=\"row\">${sv.name}</th><td>${sv.destination}</td><td>${freq}</td><td class=\"next-arrival\">${times.nextArrival}</td><td class=\"minutes-away\">${times.minutesAway}</td></tr>`;
+            $("#trains").append(newRow);
+            
+            // Store train keys for the updates
+            trains.push(sk);
+            
+            // Handle the errors
+          }, (errorObject) => {
+            console.log("Errors handled: " + errorObject.code);
+          });
+    },
+
+    currentDate: () => {
+        $("#current-date").text(moment().format("dddd, MMMM Do YYYY"));
+    },
+
+    updateSchedule: () => {
+        setInterval(() => {
+            trains.forEach((v) => {
+                let first = $(`#${v}`).attr("data-first");
+                let freq = $(`#${v}`).attr("data-frequency");
+                let times = trainSchedules.updateTimes(first, freq);
+                $(`#${v} .next-arrival`).text(times.nextArrival);
+                $(`#${v} .minutes-away`).text(times.minutesAway);
+            })
+            
+        },60000); 
+    } 
+}
+
+$(document).ready(() => {
+    $("#add-train").on("click", (e) => {
+        e.preventDefault();
+        trainSchedules.addTrain;
+    });
+
+    trainSchedules.displaySchedule();
+    trainSchedules.currentDate();
+    trainSchedules.updateSchedule();
 });

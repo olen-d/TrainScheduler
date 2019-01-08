@@ -1,0 +1,11 @@
+body {
+    padding-bottom: 3rem;
+}
+
+.h-sm {
+    font-size:70%;
+}
+
+.top-buffer-sm {
+    margin-top: 3rem;
+}
