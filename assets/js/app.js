@@ -94,7 +94,7 @@ const trainSchedules = {
 $(document).ready(() => {
     $("#add-train").on("click", (e) => {
         e.preventDefault();
-        trainSchedules.addTrain;
+        trainSchedules.addTrain();
     });
 
     trainSchedules.displaySchedule();
