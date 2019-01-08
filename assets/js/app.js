@@ -74,7 +74,7 @@ const trainSchedules = {
     },
 
     currentDate: () => {
-        $("#current-date").text(moment().format("dddd, MMMM Do YYYY"));
+        $("#current-date").text(moment().format("dddd, MMMM Do, YYYY"));
     },
 
     updateSchedule: () => {
