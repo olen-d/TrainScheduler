@@ -2,6 +2,15 @@ body {
     padding-bottom: 3rem;
 }
 
+h1, h2 {
+    font-family: 'Oswald', sans-serif;
+}
+
+table {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.1rem;
+}
+
 .h-sm {
     font-size:70%;
 }
