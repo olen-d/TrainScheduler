@@ -17,16 +17,21 @@ let trainsRef = dataRef.ref("/trains");
 
 const trainSchedules = {
     addTrain() {
-        train["name"] = $("#train-name").val().trim();
-        train["destination"] = $("#train-destination").val().trim();
-        train["first"] = $("#first-train").val().trim();
-        train["frequency"] = $("#train-frequency").val().trim();
-        train["dateAdded"] = firebase.database.ServerValue.TIMESTAMP;
-        
-        // Handle errors 
-        trainsRef.push(train, (error) => {
-            (error ? console.log("Errors handled " + error) : console.log("Train successfully added to the database. "));
-        });
+        if(trainSchedules.vTrainForm()) {
+            train["name"] = $("#train-name").val().trim();
+            train["destination"] = $("#train-destination").val().trim();
+            train["first"] = $("#first-train").val().trim();
+            train["frequency"] = $("#train-frequency").val().trim();
+            train["dateAdded"] = firebase.database.ServerValue.TIMESTAMP;
+            
+            // Handle errors 
+            trainsRef.push(train, (error) => {
+                (error ? console.log("Errors handled " + error) : console.log("Train successfully added to the database. "));
+            });
+
+            // Clean up
+            trainSchedules.clearTrainFields();
+        }
     },
     
     updateTimes(first, freq) {
@@ -153,31 +158,34 @@ const trainSchedules = {
 
     updateTrain() {
         // Update the Database
-        let trainKey = $("#train-id").val().trim();
-        let trainRef = dataRef.ref(`/trains/${trainKey}`)
-      
-        train["name"] = $("#train-name").val().trim();
-        train["destination"] = $("#train-destination").val().trim();
-        train["first"] = $("#first-train").val().trim();
-        train["frequency"] = $("#train-frequency").val().trim();
-        train["dateAdded"] = $("#train-added").val().trim();
-        train["dateUpdated"] = firebase.database.ServerValue.TIMESTAMP;
+        if(trainSchedules.vTrainForm()) {
+            let trainKey = $("#train-id").val().trim();
+            let trainRef = dataRef.ref(`/trains/${trainKey}`)
+        
+            train["name"] = $("#train-name").val().trim();
+            train["destination"] = $("#train-destination").val().trim();
+            train["first"] = $("#first-train").val().trim();
+            train["frequency"] = $("#train-frequency").val().trim();
+            train["dateAdded"] = $("#train-added").val().trim();
+            train["dateUpdated"] = firebase.database.ServerValue.TIMESTAMP;
 
-        trainRef.set(train, (error) => {
-            (error ? console.log("Errors handled " + error) : console.log("Train successfully updated in the database. "));
-        });
+            trainRef.set(train, (error) => {
+                (error ? console.log("Errors handled " + error) : console.log("Train successfully updated in the database. "));
+            });
 
-        // Change Edit Train and switch the submit buttons
-        $("#train-form-header").text("Add a Train");
-        $("#edit-train").css("display","none");
-        $("#add-train").css("display","block");
+            // Change Edit Train and switch the submit buttons
+            $("#train-form-header").text("Add a Train");
+            $("#edit-train").css("display","none");
+            $("#add-train").css("display","block");
 
-        // Clean up
-        trainSchedules.clearTrainFields();
+            // Clean up
+            trainSchedules.clearTrainFields();
+        }
     },
 
     clearTrainFields() {
         $("#train-id").val("");
+        $('#train-added').val("");
         $("#train-name").val("");
         $("#train-destination").val("");
         $("#first-train").val("");
@@ -205,7 +213,58 @@ const trainSchedules = {
             $(`#${trainKey} .next-arrival`).text(times.nextArrival);
             $(`#${trainKey} .minutes-away`).text(times.minutesAway);
         });   
+    },
+
+    // Validate the user input so Esterling doesn't fire me...
+    vText(userInput) {
+        let v = /([^\s])/.test(userInput);   // Check to make sure the field isn't blank
+        return v;
+    },
+
+    vMilTime(userInput) {
+        let v = /([01]\d|2[0-3]):[0-5]\d/.test(userInput);  // Check that the time is in the format 00:00
+        return v;
+    },
+
+    vNumeric(userInput) {
+        let v = /^\d+$/.test(userInput);    // Check that the string contains only digits
+        return v;
+    },
+
+    vTrainForm() {
+        let valid = true;
+
+        if (!trainSchedules.vText($("#train-name").val())) {
+            valid = false;
+            $("#tnl").css("color","#aa0000");
+        } else {
+            $("#tnl").css("color","#212529");
+        }
+
+        if (!trainSchedules.vText($("#train-destination").val())) {
+            valid = false;
+            $("#tdl").css("color","#aa0000")
+        } else {
+            $("#tdl").css("color","#212529");
+        }
+        
+        if (!trainSchedules.vMilTime($("#first-train").val())) {
+            valid = false;
+            $("#ftl").css("color","#aa0000")
+        }else {
+            $("#ftl").css("color","#212529");
+        }
+
+        if (!trainSchedules.vNumeric($("#train-frequency").val())) { 
+        valid = false;
+            $("#thl").css("color","#aa0000")
+        } else {
+            $("#thl").css("color","#212529");
+        }
+        
+        return valid;
     }
+
 }
 
 $(document).ready(() => {
