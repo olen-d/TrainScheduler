@@ -11,10 +11,52 @@ table {
     font-size: 1.1rem;
 }
 
+dialog {
+    text-align: left;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
 .h-sm {
-    font-size:70%;
+    font-size: 70%;
 }
 
 .top-buffer-sm {
     margin-top: 3rem;
+}
+
+.fas {
+    color: #7777ff;
+}
+
+.fas:hover {
+    color: #222266;
+}
+
+.button {
+    /*font-family: 'Oswald', sans-serif;*/
+    background-color:#aa1111;
+    border: none;
+    color: #ffffff;
+    padding: 0.25rem;
+    width: 7rem;
+    border-radius: 10px;
+    outline: none;
+}
+
+button:focus {outline:0;}
+
+.button:hover {
+    background-color: #ff8800;
+}
+
+.danger {
+    background-color:#ffaaaa;
+    color: #aa0000;
+}
+
+#edit-train {
+   display: none;
 }

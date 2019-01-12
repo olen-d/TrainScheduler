@@ -25,6 +25,9 @@
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Teko:300|Oswald" rel="stylesheet">
         
+        <!-- Fontawesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
         <!-- Site Specific Styles -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 
@@ -55,7 +58,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h2>
-                                Current Train Schedule <span id="current-date" class="h-sm"></span>
+                                Current Train Schedule <span id="current-date" class="h-sm"></span> <span id="current-time" class="h-sm"></span>
                             </h2>
                         </div>
                         <div class="card-body">
@@ -87,13 +90,15 @@
                 <div class="col-12 col-lg-10">
                     <div class="card bg-light">
                         <div class="card-header">
-                            <h2>
+                            <h2 id="train-form-header">
                                 Add a Train
                             </h2>
                         </div>
                         <div class="card-body">
                             <!--    Administration Form Goes Here    -->
                             <form>
+                                <input id="train-id" type="hidden" value="">
+                                <input id="train-added" type="hidden" value="">
                                 <div class="form-group">
                                     <label for="train-name">Train Name</label>
                                     <input type="text" class="form-control" id="train-name" placeholder="Enter train name.">
@@ -112,7 +117,8 @@
                                     <input type="text" class="form-control" id="train-frequency" aria-describedby="frequency-help" placeholder="Enter train frequency.">
                                     <small id="frequency-help" class="form-text text-muted">In minutes</small>
                                 </div>
-                                <button type="submit" class="btn btn-primary" id="add-train">Submit</button>
+                                <button type="submit" class="btn btn-primary" id="add-train">Add Train</button>
+                                <button type="submit" class="btn btn-primary" id="edit-train">Update Train</button>
                             </form>
                         </div>
                     </div>
@@ -122,6 +128,21 @@
                 </div>                   
             </div>
         </div>
+        <dialog id="delete-dialog" class="danger">
+            <p>
+                Are you sure you want to delete the train? 
+            </p>
+            <form method="dialog">
+                <menu>
+                    <button type="reset" class="button button-danger" id="delete-cancel">
+                        Cancel
+                    </button>
+                    <button type="submit" class="button button-danger" id="delete-submit">
+                        Delete
+                    </button>
+                </menu>
+            </form>
+        </dialog>
         <!-- JavaScript -->
         <script src="assets/js/app.js"></script> 
     </body>
